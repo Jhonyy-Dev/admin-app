@@ -15,7 +15,7 @@ interface ProcesoInmigracion {
 
 export const ListarProcesos = async () => {
     try {
-        const response = await axios.get("/api/inmigracion");
+        const response = await axios.get("/api/inmigracion/");
         return response.data;
     } catch (error) {
         console.error("Error al listar procesos:", error);
@@ -25,7 +25,7 @@ export const ListarProcesos = async () => {
 
 export const ObtenerProceso = async (id: number) => {
     try {
-        const response = await axios.get(`/api/inmigracion/${id}`);
+        const response = await axios.get(`/api/inmigracion/${id}/`);
         return response.data;
     } catch (error) {
         console.error("Error al obtener proceso:", error);
@@ -35,7 +35,7 @@ export const ObtenerProceso = async (id: number) => {
 
 export const CrearProceso = async (data: ProcesoInmigracion) => {
     try {
-        const response = await axios.post("/api/inmigracion", data);
+        const response = await axios.post("/api/inmigracion/", data);
         return response.data;
     } catch (error) {
         console.error("Error al crear proceso:", error);
@@ -45,7 +45,7 @@ export const CrearProceso = async (data: ProcesoInmigracion) => {
 
 export const ActualizarProceso = async (id: number, data: Partial<ProcesoInmigracion>) => {
     try {
-        const response = await axios.put(`/api/inmigracion/${id}`, data);
+        const response = await axios.put(`/api/inmigracion/${id}/`, data);
         return response.data;
     } catch (error) {
         console.error("Error al actualizar proceso:", error);
@@ -56,7 +56,7 @@ export const ActualizarProceso = async (id: number, data: Partial<ProcesoInmigra
 
 export const EliminarProceso = async (id: number) => {
     try {
-        const response = await axios.delete(`/api/inmigracion/${id}`);
+        const response = await axios.delete(`/api/inmigracion/${id}/`);
         return response.data;
     } catch (error) {
         console.error("Error al eliminar proceso:", error);

@@ -17,7 +17,7 @@ export const listarCitas = async () => {
     }
     
     try {
-        const response = await axios.get("/api/citas");
+        const response = await axios.get("/api/citas/");
         // Guardar en caché
         citasCache.listado = response.data;
         return response.data;
@@ -34,7 +34,7 @@ export const obtenerCitaDatos = async (id: number) => {
     }
     
     try {
-        const response = await axios.get(`/api/citas/${id}`);
+        const response = await axios.get(`/api/citas/${id}/`);
         // Guardar en caché
         citasCache.detalles[id] = response.data;
         return response.data;
@@ -46,7 +46,7 @@ export const obtenerCitaDatos = async (id: number) => {
 
 export const crearCita = async (cita: any) => {
     try {
-        const response = await axios.post("/api/citas", cita);
+        const response = await axios.post("/api/citas/", cita);
         
         // Actualizar caché con el nuevo elemento
         if (citasCache.listado) {
@@ -62,7 +62,7 @@ export const crearCita = async (cita: any) => {
 
 export const actualizarCita = async (id: number, cita: any) => {
     try {
-        const response = await axios.put(`/api/citas/${id}`, cita);
+        const response = await axios.put(`/api/citas/${id}/`, cita);
         
         // Actualizar caché
         if (citasCache.listado) {
@@ -87,7 +87,7 @@ export const historialCita = async (id: number) => {
     }
     
     try {
-        const response = await axios.get(`/api/listar_historial_citas/${id}`);
+        const response = await axios.get(`/api/listar_historial_citas/${id}/`);
         // Guardar en caché
         citasCache.historial[id] = response.data;
         return response.data;
@@ -99,7 +99,7 @@ export const historialCita = async (id: number) => {
 
 export const eliminarCita = async (id: number) => {
     try {
-        const response = await axios.delete(`/api/citas/${id}`);
+        const response = await axios.delete(`/api/citas/${id}/`);
         
         // Actualizar caché
         if (citasCache.listado) {

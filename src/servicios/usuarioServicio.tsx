@@ -4,7 +4,7 @@ import axios from "@/libs/axios";
 
 export const ListarUsuarios = async () => {
     try {
-        const response = await axios.get("/api/usuario");
+        const response = await axios.get("/api/usuario/");
         return response.data;
     } catch (error) {
         console.error("Error al listar usuarios:", error);
@@ -18,7 +18,7 @@ export const ListarUsuarios = async () => {
 
 export const ObtenerUsuario = async (id: number) => {
     try {
-        const response = await axios.get(`/api/usuario/${id}`);
+        const response = await axios.get(`/api/usuario/${id}/`);
         return response.data;
     } catch (error) {
         console.error("Error al obtener usuario:", error);
@@ -29,7 +29,7 @@ export const ObtenerUsuario = async (id: number) => {
 
 export const CrearUsuario = async (data: any) => {
     try {
-        const response = await axios.post("/api/usuario", data);
+        const response = await axios.post("/api/usuario/", data);
         return response.data;
     } catch (error) {
         console.error("Error al crear usuario:", error);
@@ -40,7 +40,7 @@ export const CrearUsuario = async (data: any) => {
 
 export const ActualizarUsuario = async (id: number, data: any) => {
     try {
-        const response = await axios.put(`/api/usuario/${id}`, data);
+        const response = await axios.put(`/api/usuario/${id}/`, data);
         return response.data;
     } catch (error) {
         console.error("Error al actualizar usuario:", error);

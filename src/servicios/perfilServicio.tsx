@@ -2,7 +2,7 @@ import axios from "@/libs/axios";
 
 export const DatosUsuario = async () => {
   try {
-    const response = await axios.get('/api/user');
+    const response = await axios.get('/api/user/');
     return response;
 
   } catch (error: any) {
@@ -20,7 +20,7 @@ export const DatosUsuario = async () => {
 
 export const ActualizarUsuario = async (data: any) => {
   try {
-    const response = await axios.post('/api/actualizarPerfil', data);
+    const response = await axios.post('/api/actualizarPerfil/', data);
     return response;
 
   } catch (error: any) {

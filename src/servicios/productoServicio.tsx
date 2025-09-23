@@ -18,7 +18,7 @@ export interface Producto {
 
 export const ListarProductos = async () => {
   try {
-    const response = await axios.get(`/api/productos`);
+    const response = await axios.get(`/api/productos/`);
     return response;
   } catch (error) {
     console.error("Error al listar productos:", error);
@@ -28,7 +28,7 @@ export const ListarProductos = async () => {
 
 export const ObtenerProducto = async (id: number) => {
   try {
-    const response = await axios.get(`/api/productos/${id}`);
+    const response = await axios.get(`/api/productos/${id}/`);
     return response;
   } catch (error) {
     console.error("Error al obtener producto:", error);
@@ -38,7 +38,7 @@ export const ObtenerProducto = async (id: number) => {
 
 export const CrearProducto = async (formData: FormData) => {
   try {
-    const response = await axios.post(`/api/productos`, formData, {
+    const response = await axios.post(`/api/productos/`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -52,7 +52,7 @@ export const CrearProducto = async (formData: FormData) => {
 
 export const ActualizarProducto = async (id: number, formData: FormData) => {
   try {
-    const response = await axios.post(`/api/productos/${id}`, formData, {
+    const response = await axios.post(`/api/productos/${id}/`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -66,7 +66,7 @@ export const ActualizarProducto = async (id: number, formData: FormData) => {
 
 export const EliminarProducto = async (id: number) => {
   try {
-    const response = await axios.delete(`/api/productos/${id}`);
+    const response = await axios.delete(`/api/productos/${id}/`);
     return response;
   } catch (error) {
     console.error("Error al eliminar producto:", error);
