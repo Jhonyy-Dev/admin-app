@@ -2,8 +2,7 @@ import axios from "@/libs/axios";
 
 export const ListarCategorias = async () => {
     try {
-        const response = await axios.get('/api/categoria');
-        print
+        const response = await axios.get('/api/categoria/');
         return response.data;
 
     } catch (error: any) {
@@ -48,8 +47,7 @@ export const EliminarCategoria = async (id: number) => {
 
 export const ObtenerCategoria = async (id: number) => { 
     try {
-        const response = await axios.get(`/api/categoria/${id}`);
-        print
+        const response = await axios.get(`/api/categoria/${id}/`);
         return response.data;
 
     } catch (error: any) {
