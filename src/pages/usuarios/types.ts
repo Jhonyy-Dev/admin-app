@@ -8,6 +8,7 @@ export interface Usuario {
     fecha_nacimiento?: string;
     rol:              string;
     direccion?:       string;
+    tipo_servicio:    'medico' | 'migratorio';
 }
 
 export interface HistorialReferido {

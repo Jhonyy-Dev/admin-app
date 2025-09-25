@@ -13,6 +13,13 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   Dialog,
   DialogContent,
   DialogHeader,
@@ -22,8 +29,10 @@ import { Usuario } from "./types";
 import { CrearUsuario, ActualizarUsuario, ObtenerUsuario } from "@/servicios/usuarioServicio";
 import { Eye, EyeOff } from "lucide-react";
 
-
 const formSchema = (isEditing: boolean) => z.object({
+  tipo_servicio: z.enum(['medico', 'migratorio'], {
+    required_error: "Debe seleccionar un tipo de servicio.",
+  }),
   nombre: z.string().min(2, {
     message: "El nombre debe tener al menos 2 caracteres.",
   }),
@@ -57,6 +66,7 @@ export const ModalUsuario = ({ isOpen, onClose, usuario, onSubmit, actualizarLis
   const form = useForm<z.infer<ReturnType<typeof formSchema>>>({
     resolver: zodResolver(formSchema(!!usuario)),
     defaultValues: {
+      tipo_servicio: undefined,
       nombre: "",
       email: "",
       telefono: "",
@@ -70,6 +80,7 @@ export const ModalUsuario = ({ isOpen, onClose, usuario, onSubmit, actualizarLis
 
   const handleClose = () => {
     form.reset({
+      tipo_servicio: undefined,
       nombre: "",
       email: "",
       telefono: "",
@@ -92,6 +103,7 @@ export const ModalUsuario = ({ isOpen, onClose, usuario, onSubmit, actualizarLis
           const datosUsuario = await ObtenerUsuario(usuario.id);
        
           form.reset({
+            tipo_servicio: datosUsuario.usuario.tipo_servicio || undefined,
             nombre: datosUsuario.usuario.nombre,
             email: datosUsuario.usuario.email,
             telefono: datosUsuario.usuario.telefono || "",
@@ -104,6 +116,7 @@ export const ModalUsuario = ({ isOpen, onClose, usuario, onSubmit, actualizarLis
         }
       } else {
         form.reset({
+          tipo_servicio: undefined,
           nombre: "",
           email: "",
           telefono: "",
@@ -150,6 +163,25 @@ export const ModalUsuario = ({ isOpen, onClose, usuario, onSubmit, actualizarLis
         <Form {...form}   >
         <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6 p-6  rounded-lg shadow-lg">
       
+        {/* Campo obligatorio de tipo de servicio */}
+        <FormField control={form.control} name="tipo_servicio" render={({ field }) => (
+          <FormItem>
+            <FormLabel className="text-gray-300">Tipo de Servicio *</FormLabel>
+            <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <FormControl>
+                <SelectTrigger className="rounded-lg">
+                  <SelectValue placeholder="Seleccione el tipo de servicio" />
+                </SelectTrigger>
+              </FormControl>
+              <SelectContent>
+                <SelectItem value="medico">Situación Médica</SelectItem>
+                <SelectItem value="migratorio">Situación Migratoria</SelectItem>
+              </SelectContent>
+            </Select>
+            <FormMessage />
+          </FormItem>
+        )} />
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FormField control={form.control} name="nombre" render={({ field }) => (
             <FormItem>
