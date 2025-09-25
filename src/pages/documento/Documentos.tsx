@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -55,6 +56,7 @@ interface Documento {
 
 
 const Documentos = () => {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [activeTab, setActiveTab] = useState("listado");
   const [showUploadDialog, setShowUploadDialog] = useState(false);
@@ -335,10 +337,19 @@ const Documentos = () => {
     setShowTypeSelectionDialog(true);
   };
 
+  const handleCloseModal = () => {
+    // Redirigir al Dashboard cuando se cierre el modal
+    navigate('/dashboard');
+  };
+
   return (
     <div className="space-y-6">
       {/* Modal de Selección de Tipo de Documento */}
-      <Dialog open={showTypeSelectionDialog} onOpenChange={setShowTypeSelectionDialog}>
+      <Dialog open={showTypeSelectionDialog} onOpenChange={(open) => {
+        if (!open) {
+          handleCloseModal();
+        }
+      }}>
         <DialogContent className="sm:max-w-[500px]" onInteractOutside={(e) => e.preventDefault()}>
           <DialogHeader>
             <DialogTitle className="text-center text-2xl font-bold">Seleccionar Tipo de Documentos</DialogTitle>
