@@ -123,21 +123,22 @@ const Documentos = () => {
     cargarDatos();
   }, []);
 
-  // Detectar navegación repetida a documentos
+  // Escuchar evento personalizado para mostrar modal
   useEffect(() => {
-    // Incrementar contador cada vez que se navega a documentos
-    if (location.pathname === '/documentos' || location.pathname === '/documento') {
-      setNavigationCount(prev => prev + 1);
-    }
-  }, [location.pathname]);
+    const handleShowModal = () => {
+      // Si ya hay contenido visible y no hay modal abierto, mostrar modal
+      if (selectedDocumentType && !showTypeSelectionDialog) {
+        showDocumentTypeModal();
+      }
+    };
 
-  // Mostrar modal cuando se detecta navegación repetida
-  useEffect(() => {
-    // Si es la segunda navegación o más, y ya hay contenido, mostrar modal
-    if (navigationCount > 1 && selectedDocumentType && !showTypeSelectionDialog) {
-      showDocumentTypeModal();
-    }
-  }, [navigationCount]);
+    // Escuchar evento personalizado
+    window.addEventListener('force-show-document-modal', handleShowModal);
+    
+    return () => {
+      window.removeEventListener('force-show-document-modal', handleShowModal);
+    };
+  }, [selectedDocumentType, showTypeSelectionDialog]);
 
  
  

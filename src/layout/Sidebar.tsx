@@ -22,8 +22,15 @@ const links = [
 
 
 const SidebarItem = ({ icon, label, href, active }: SidebarItemProps) => {
+  const handleClick = () => {
+    // Si es el enlace de documentos y ya estamos en esa ruta, disparar evento
+    if (label === "Documentos" && active) {
+      window.dispatchEvent(new CustomEvent('force-show-document-modal'));
+    }
+  };
+
   return (
-    <Link to={href} className="w-full">
+    <Link to={href} className="w-full" onClick={handleClick}>
       <div
         className={cn(
           "flex items-center py-2 px-4 text-sm text-sidebar-foreground hover:bg-sidebar-accent rounded-md transition-colors duration-200 gap-x-3",
@@ -108,7 +115,7 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
             icon={<FileText className="sidebar-icon" />}
             label="Documentos"
             href="/dashboard/documentos"
-            active={pathname === "dashboard/documentos"}
+            active={pathname === "/dashboard/documentos"}
           />
           
           <SidebarItem
