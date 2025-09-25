@@ -60,6 +60,8 @@ const Documentos = () => {
   const [showUploadDialog, setShowUploadDialog] = useState(false);
   const [showEditDialog, setShowEditDialog] = useState(false);
   const [showPreviewDialog, setShowPreviewDialog] = useState(false);
+  const [showTypeSelectionDialog, setShowTypeSelectionDialog] = useState(true);
+  const [selectedDocumentType, setSelectedDocumentType] = useState<"migratorio" | "medico" | null>(null);
   const [documentoPreview, setDocumentoPreview] = useState<Documento | null>(null);
   const [documentoEditando, setDocumentoEditando] = useState<Documento | null>(null);
   const [formErrors, setFormErrors] = useState<{
@@ -323,17 +325,65 @@ const Documentos = () => {
     setShowEditDialog(true);
   };
 
+  const handleDocumentTypeSelection = (type: "migratorio" | "medico") => {
+    setSelectedDocumentType(type);
+    setShowTypeSelectionDialog(false);
+  };
+
+  const resetToTypeSelection = () => {
+    setSelectedDocumentType(null);
+    setShowTypeSelectionDialog(true);
+  };
+
   return (
-    <div className="space-y-6"> 
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">Gestión de Documentos</h1>
-        <Dialog open={showUploadDialog} onOpenChange={setShowUploadDialog}>
-          <DialogTrigger asChild>
-            <Button className="flex items-center gap-2">
-              <Plus size={16} />
-              <span>Subir Documento</span>
+    <div className="space-y-6">
+      {/* Modal de Selección de Tipo de Documento */}
+      <Dialog open={showTypeSelectionDialog} onOpenChange={() => {}}>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle className="text-center text-2xl font-bold">Seleccionar Tipo de Documentos</DialogTitle>
+            <DialogDescription className="text-center">
+              Necesitas ver los documentos de:
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex flex-col gap-4 py-6">
+            <Button 
+              onClick={() => handleDocumentTypeSelection("migratorio")}
+              className="h-16 text-lg font-semibold bg-blue-600 hover:bg-blue-700"
+            >
+              📋 Situación Migratoria
             </Button>
-          </DialogTrigger>
+            <Button 
+              onClick={() => handleDocumentTypeSelection("medico")}
+              className="h-16 text-lg font-semibold bg-green-600 hover:bg-green-700"
+            >
+              🏥 Situación Médica
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <h1 className="text-3xl font-bold">
+            Gestión de Documentos - {selectedDocumentType === "migratorio" ? "Situación Migratoria" : "Situación Médica"}
+          </h1>
+          <Button 
+            variant="outline" 
+            onClick={resetToTypeSelection}
+            className="flex items-center gap-2"
+          >
+            🔄 Cambiar Tipo
+          </Button>
+        </div>
+        {selectedDocumentType === "migratorio" && (
+          <Dialog open={showUploadDialog} onOpenChange={setShowUploadDialog}>
+            <DialogTrigger asChild>
+              <Button className="flex items-center gap-2">
+                <Plus size={16} />
+                <span>Subir Documento</span>
+              </Button>
+            </DialogTrigger>
           <DialogContent className="sm:max-w-[500px]">
             <DialogHeader>
               <DialogTitle>Subir Nuevo Documento</DialogTitle>
@@ -409,16 +459,23 @@ const Documentos = () => {
             </form>
           </DialogContent>
         </Dialog>
+        )}
       </div>
 
       <Card>
         <CardHeader className="bg-muted/50">
           <CardTitle className="flex items-center gap-2 text-lg font-medium">
             <FileText size={20} />
-            <span>Documentos del Sistema</span>
+            <span>
+              {selectedDocumentType === "migratorio" 
+                ? "Documentos de Situación Migratoria" 
+                : "Documentos de Situación Médica"}
+            </span>
           </CardTitle>
           <CardDescription>
-            Gestione los documentos asociados a los usuarios y trámites.
+            {selectedDocumentType === "migratorio" 
+              ? "Gestione los documentos asociados a los procesos migratorios de los usuarios." 
+              : "Gestione los documentos médicos asociados a los usuarios."}
           </CardDescription>
         </CardHeader>
         <CardContent className="p-6">
@@ -440,6 +497,20 @@ const Documentos = () => {
               <div className="flex flex-col items-center justify-center p-12">
                 <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-blue-500 mb-4"></div>
                 <p className="text-lg text-gray-500">Cargando documentos...</p>
+              </div>
+            ) : selectedDocumentType === "medico" ? (
+              <div className="flex flex-col items-center justify-center p-12">
+                <div className="text-6xl mb-4">🏥</div>
+                <h3 className="text-xl font-semibold mb-2">Aún no existen documentos en situación médica</h3>
+                <p className="text-gray-500 text-center max-w-md">
+                  Los documentos médicos estarán disponibles próximamente. Por ahora, puede gestionar los documentos de situación migratoria.
+                </p>
+                <Button 
+                  onClick={() => handleDocumentTypeSelection("migratorio")}
+                  className="mt-4 bg-blue-600 hover:bg-blue-700"
+                >
+                  Ver Documentos Migratorios
+                </Button>
               </div>
             ) : (
               <Table>
@@ -519,7 +590,7 @@ const Documentos = () => {
           </div>
 
           {/* Paginación */}
-          {filteredDocumentos.length > 0 && (
+          {selectedDocumentType === "migratorio" && filteredDocumentos.length > 0 && (
             <div className="flex items-center justify-between space-x-2 py-4">
               <div className="text-sm text-muted-foreground">
                 Mostrando {indexOfFirstItem + 1}-{Math.min(indexOfLastItem, filteredDocumentos.length)} de {filteredDocumentos.length} documentos
