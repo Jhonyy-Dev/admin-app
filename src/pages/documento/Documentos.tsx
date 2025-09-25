@@ -423,7 +423,7 @@ const Documentos = () => {
           {/* Header con diseño mejorado */}
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
             <div className="flex flex-col gap-2">
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+              <h1 className="text-3xl font-bold text-white">
                 Gestión de Documentos
               </h1>
               <div className="flex items-center gap-3">
