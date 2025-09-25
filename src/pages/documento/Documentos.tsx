@@ -420,21 +420,38 @@ const Documentos = () => {
       {/* Contenido principal - solo se muestra cuando no está el modal de selección */}
       {!showTypeSelectionDialog && (
         <>
-          <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <h1 className="text-3xl font-bold">
-            Gestión de Documentos - {selectedDocumentType === "migratorio" ? "Situación Migratoria" : "Situación Médica"}
-          </h1>
-          <Button 
-            variant="outline" 
-            onClick={resetToTypeSelection}
-            className="flex items-center gap-2"
-          >
-            🔄 Cambiar Tipo
-          </Button>
-        </div>
-        {selectedDocumentType === "migratorio" && (
-          <Dialog open={showUploadDialog} onOpenChange={setShowUploadDialog}>
+          {/* Header con diseño mejorado */}
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+            <div className="flex flex-col gap-2">
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+                Gestión de Documentos
+              </h1>
+              <div className="flex items-center gap-3">
+                <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
+                  selectedDocumentType === "migratorio" 
+                    ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200" 
+                    : "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
+                }`}>
+                  {selectedDocumentType === "migratorio" ? "📋 Situación Migratoria" : "🏥 Situación Médica"}
+                </span>
+                <Button 
+                  variant="ghost" 
+                  size="sm"
+                  onClick={resetToTypeSelection}
+                  className="h-8 px-3 text-xs font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-gray-100 dark:hover:bg-gray-800 transition-all duration-200 border border-gray-200 dark:border-gray-700 rounded-lg"
+                >
+                  <svg className="w-3 h-3 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  </svg>
+                  Cambiar Tipo
+                </Button>
+              </div>
+            </div>
+            
+            {/* Botón de acción principal */}
+            <div className="flex items-center gap-3">
+              {selectedDocumentType === "migratorio" && (
+                <Dialog open={showUploadDialog} onOpenChange={setShowUploadDialog}>
             <DialogTrigger asChild>
               <Button className="flex items-center gap-2">
                 <Plus size={16} />
@@ -516,8 +533,9 @@ const Documentos = () => {
             </form>
           </DialogContent>
         </Dialog>
-        )}
-      </div>
+              )}
+            </div>
+          </div>
 
       <Card>
         <CardHeader className="bg-muted/50">
