@@ -64,6 +64,7 @@ const Documentos = () => {
   const [showPreviewDialog, setShowPreviewDialog] = useState(false);
   const [showTypeSelectionDialog, setShowTypeSelectionDialog] = useState(true);
   const [selectedDocumentType, setSelectedDocumentType] = useState<"migratorio" | "medico" | null>(null);
+  const [isInitialModal, setIsInitialModal] = useState(true);
   const [documentoPreview, setDocumentoPreview] = useState<Documento | null>(null);
   const [documentoEditando, setDocumentoEditando] = useState<Documento | null>(null);
   const [formErrors, setFormErrors] = useState<{
@@ -330,11 +331,13 @@ const Documentos = () => {
   const handleDocumentTypeSelection = (type: "migratorio" | "medico") => {
     setSelectedDocumentType(type);
     setShowTypeSelectionDialog(false);
+    setIsInitialModal(false); // Ya no es el modal inicial
   };
 
   const resetToTypeSelection = () => {
     setSelectedDocumentType(null);
     setShowTypeSelectionDialog(true);
+    setIsInitialModal(false); // No es modal inicial, es cambio de tipo
   };
 
   const handleCloseModal = () => {
@@ -347,7 +350,13 @@ const Documentos = () => {
       {/* Modal de Selección de Tipo de Documento */}
       <Dialog open={showTypeSelectionDialog} onOpenChange={(open) => {
         if (!open) {
-          handleCloseModal();
+          if (isInitialModal) {
+            // Si es el modal inicial, redirigir al Dashboard
+            handleCloseModal();
+          } else {
+            // Si es cambio de tipo, solo cerrar el modal y mantener la página actual
+            setShowTypeSelectionDialog(false);
+          }
         }
       }}>
         <DialogContent className="sm:max-w-[500px]" onInteractOutside={(e) => e.preventDefault()}>
