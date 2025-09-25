@@ -67,6 +67,7 @@ const Documentos = () => {
   const [selectedDocumentType, setSelectedDocumentType] = useState<"migratorio" | "medico" | null>(null);
   const [isInitialModal, setIsInitialModal] = useState(true);
   const [previousDocumentType, setPreviousDocumentType] = useState<"migratorio" | "medico" | null>(null);
+  const [navigationCount, setNavigationCount] = useState(0);
   const [documentoPreview, setDocumentoPreview] = useState<Documento | null>(null);
   const [documentoEditando, setDocumentoEditando] = useState<Documento | null>(null);
   const [formErrors, setFormErrors] = useState<{
@@ -124,17 +125,19 @@ const Documentos = () => {
 
   // Detectar navegación repetida a documentos
   useEffect(() => {
-    // Exponer función global para que el menú lateral pueda llamarla
-    (window as any).showDocumentModal = () => {
-      if (!showTypeSelectionDialog && selectedDocumentType) {
-        showDocumentTypeModal();
-      }
-    };
+    // Incrementar contador cada vez que se navega a documentos
+    if (location.pathname === '/documentos' || location.pathname === '/documento') {
+      setNavigationCount(prev => prev + 1);
+    }
+  }, [location.pathname]);
 
-    return () => {
-      delete (window as any).showDocumentModal;
-    };
-  }, [showTypeSelectionDialog, selectedDocumentType]);
+  // Mostrar modal cuando se detecta navegación repetida
+  useEffect(() => {
+    // Si es la segunda navegación o más, y ya hay contenido, mostrar modal
+    if (navigationCount > 1 && selectedDocumentType && !showTypeSelectionDialog) {
+      showDocumentTypeModal();
+    }
+  }, [navigationCount]);
 
  
  
