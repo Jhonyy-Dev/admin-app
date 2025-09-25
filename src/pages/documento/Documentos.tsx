@@ -65,6 +65,7 @@ const Documentos = () => {
   const [showTypeSelectionDialog, setShowTypeSelectionDialog] = useState(true);
   const [selectedDocumentType, setSelectedDocumentType] = useState<"migratorio" | "medico" | null>(null);
   const [isInitialModal, setIsInitialModal] = useState(true);
+  const [previousDocumentType, setPreviousDocumentType] = useState<"migratorio" | "medico" | null>(null);
   const [documentoPreview, setDocumentoPreview] = useState<Documento | null>(null);
   const [documentoEditando, setDocumentoEditando] = useState<Documento | null>(null);
   const [formErrors, setFormErrors] = useState<{
@@ -335,7 +336,7 @@ const Documentos = () => {
   };
 
   const resetToTypeSelection = () => {
-    setSelectedDocumentType(null);
+    setPreviousDocumentType(selectedDocumentType); // Guardar el tipo actual
     setShowTypeSelectionDialog(true);
     setIsInitialModal(false); // No es modal inicial, es cambio de tipo
   };
@@ -354,8 +355,9 @@ const Documentos = () => {
             // Si es el modal inicial, redirigir al Dashboard
             handleCloseModal();
           } else {
-            // Si es cambio de tipo, solo cerrar el modal y mantener la página actual
+            // Si es cambio de tipo, cerrar modal y restaurar el tipo anterior
             setShowTypeSelectionDialog(false);
+            setSelectedDocumentType(previousDocumentType); // Restaurar el tipo anterior
           }
         }
       }}>
