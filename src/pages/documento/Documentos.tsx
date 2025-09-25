@@ -338,8 +338,8 @@ const Documentos = () => {
   return (
     <div className="space-y-6">
       {/* Modal de Selección de Tipo de Documento */}
-      <Dialog open={showTypeSelectionDialog} onOpenChange={() => {}}>
-        <DialogContent className="sm:max-w-[500px]">
+      <Dialog open={showTypeSelectionDialog} onOpenChange={setShowTypeSelectionDialog}>
+        <DialogContent className="sm:max-w-[500px]" onInteractOutside={(e) => e.preventDefault()}>
           <DialogHeader>
             <DialogTitle className="text-center text-2xl font-bold">Seleccionar Tipo de Documentos</DialogTitle>
             <DialogDescription className="text-center">
@@ -363,7 +363,10 @@ const Documentos = () => {
         </DialogContent>
       </Dialog>
 
-      <div className="flex items-center justify-between">
+      {/* Contenido principal - solo se muestra cuando no está el modal de selección */}
+      {!showTypeSelectionDialog && (
+        <>
+          <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <h1 className="text-3xl font-bold">
             Gestión de Documentos - {selectedDocumentType === "migratorio" ? "Situación Migratoria" : "Situación Médica"}
@@ -812,6 +815,8 @@ const Documentos = () => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+        </>
+      )}
     </div>
   );
 };
