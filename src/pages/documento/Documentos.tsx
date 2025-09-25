@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -57,6 +57,7 @@ interface Documento {
 
 const Documentos = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [searchTerm, setSearchTerm] = useState("");
   const [activeTab, setActiveTab] = useState("listado");
   const [showUploadDialog, setShowUploadDialog] = useState(false);
@@ -120,6 +121,20 @@ const Documentos = () => {
     
     cargarDatos();
   }, []);
+
+  // Detectar navegación repetida a documentos
+  useEffect(() => {
+    // Exponer función global para que el menú lateral pueda llamarla
+    (window as any).showDocumentModal = () => {
+      if (!showTypeSelectionDialog && selectedDocumentType) {
+        showDocumentTypeModal();
+      }
+    };
+
+    return () => {
+      delete (window as any).showDocumentModal;
+    };
+  }, [showTypeSelectionDialog, selectedDocumentType]);
 
  
  
@@ -344,6 +359,19 @@ const Documentos = () => {
   const handleCloseModal = () => {
     // Redirigir al Dashboard cuando se cierre el modal
     navigate('/dashboard');
+  };
+
+  // Función para mostrar el modal cuando se presiona "Documentos" desde el menú
+  const showDocumentTypeModal = () => {
+    if (selectedDocumentType) {
+      // Si ya hay un tipo seleccionado, guardar como anterior y mostrar modal
+      setPreviousDocumentType(selectedDocumentType);
+      setIsInitialModal(false);
+    } else {
+      // Si no hay tipo seleccionado, es modal inicial
+      setIsInitialModal(true);
+    }
+    setShowTypeSelectionDialog(true);
   };
 
   return (
